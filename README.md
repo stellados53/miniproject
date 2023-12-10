@@ -11,5 +11,5 @@ python index.py
 ```
 - it gives us a httpcode
 - hold ctrl and click on the link
--           (or)
+-          or
 - copy and paste it in your web browser
