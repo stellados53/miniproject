@@ -9,3 +9,5 @@ to run the program
 ```
 python app.py
 ```
+- it gives us a httpcode
+- copy and paste it in your web browser
