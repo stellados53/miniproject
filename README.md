@@ -7,7 +7,7 @@ to run the program
 - again give the prompt 
 
 ```
-python app.py
+python index.py
 ```
 - it gives us a httpcode
 - copy and paste it in your web browser
