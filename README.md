@@ -9,7 +9,7 @@ to run the program
 ```
 python index.py
 ```
-- it gives us a httpcode
+- it generates a http link
 - hold ctrl and click on the link
 - (or) 
 - copy and paste it in your web browser
