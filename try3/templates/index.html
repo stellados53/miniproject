@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Builder</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #ffffff; /* Default: White background color */
+            color: #000000; /* Set text color to black */
+        }
+
+        .container {
+            background-color: #f8f9fa; /* Default: Lighter container background color */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 48px; /* Increase the font size of AI Resume Builder */
+            text-transform: capitalize; /* Capitalize the first letter of each word */
+            color: #000000; /* Set h1 text color to black */
+        }
+
+        h2 {
+            font-size: 24px; /* Decrease the font size of section headings */
+        }
+
+        /* Input and textarea styles */
+        input,
+        textarea {
+            background-color: #e9ecef; /* Default: Light input background color */
+            color: #000000; /* Set input text color to black */
+        }
+
+        .mode-switch-container {
+            text-align: right;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .mode-switch {
+            display: inline-block;
+            position: relative;
+            width: 60px;
+            height: 34px;
+        }
+
+        .mode-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 34px;
+            transition: 0.4s;
+        }
+
+        .mode-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: #fff;
+            border-radius: 50%;
+            transition: 0.4s;
+        }
+
+        input:checked+.mode-slider {
+            background-color: #2196F3;
+        }
+
+        input:checked+.mode-slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Add any additional styles as needed */
+    </style>
+    <!-- You can replace the Bootstrap link with your preferred styling framework or custom styles -->
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="mode-switch-container">
+            <label class="switch mode-switch">
+                <input type="checkbox" onclick="toggleMode()" id="modeToggle">
+                <span class="mode-slider"></span>
+            </label>
+            <span id="modeLabel">Dark Mode</span>
+        </div>
+        <h1 class="text-center">AI Resume Builder</h1>
+        <form id="resumeForm" action="/generate_resume" method="post">
+            <!-- Personal Information -->
+            <h2>Personal Information</h2>
+            <div class="form-group">
+                <label for="full_name">Full Name:</label>
+                <input type="text" class="form-control" id="full_name" name="full_name" required>
+            </div>
+            <div class="form-group">
+                <label for="phone_number">Phone Number:</label>
+                <input type="tel" class="form-control" id="phone_number" name="phone_number" required>
+            </div>
+            <div class="form-group">
+                <label for="email_address">Email Address:</label>
+                <input type="email" class="form-control" id="email_address" name="email_address" required>
+            </div>
+            <div class="form-group">
+                <label for="linkedin_url">LinkedIn Profile URL (Optional):</label>
+                <input type="url" class="form-control" id="linkedin_url" name="linkedin_url">
+            </div>
+            <div class="form-group">
+                <label for="portfolio_url">Portfolio Website URL (Optional):</label>
+                <input type="url" class="form-control" id="portfolio_url" name="portfolio_url">
+            </div>
+
+            <!-- Professional Summary -->
+            <h2>Professional Summary or Objective</h2>
+            <div class="form-group">
+                <label for="professional_summary">Professional Summary:</label>
+                <textarea class="form-control" id="professional_summary" name="professional_summary" rows="4"></textarea>
+            </div>
+
+            <!-- Work Experience -->
+            <h2>Work Experience</h2>
+            <div class="work-experience">
+                <div class="form-group">
+                    <label for="company_name">Company Name:</label>
+                    <input type="text" class="form-control" id="company_name" name="company_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="job_title">Job Title:</label>
+                    <input type="text" class="form-control" id="job_title" name="job_title" required>
+                </div>
+                <div class="form-group">
+                    <label for="dates_of_employment">Dates of Employment:</label>
+                    <input type="text" class="form-control" id="dates_of_employment" name="dates_of_employment" required>
+                </div>
+            </div>
+
+            <!-- Education -->
+            <h2>Education</h2>
+            <div class="education">
+                <div class="form-group">
+                    <label for="institution_name_1">Institution Name:</label>
+                    <input type="text" class="form-control" id="institution_name_1" name="institution_name_1" required>
+                </div>
+                <div class="form-group">
+                    <label for="degree_name_1">Degree Name:</label>
+                    <input type="text" class="form-control" id="degree_name_1" name="degree_name_1" required>
+                </div>
+                <div class="form-group">
+                    <label for="graduation_year_1">Graduation Year:</label>
+                    <input type="text" class="form-control" id="graduation_year_1" name="graduation_year_1" required>
+                </div>
+            </div>
+
+            <!-- Skills -->
+            <h2>Skills</h2>
+            <div class="skills">
+                <div class="form-group">
+                    <label for="skill_1">Skill 1:</label>
+                    <input type="text" class="form-control" id="skill_1" name="skill_1" required>
+                </div>
+            </div>
+
+            <!-- Additional Sections (Optional) -->
+            <h2>Additional Sections (Optional)</h2>
+
+            <div class="form-group">
+                <button type="button" class="btn btn-secondary" onclick="addSection('education', 'Add Education')">Add
+                    Education</button>
+                <button type="button" class="btn btn-secondary" onclick="addSection('work-experience', 'Add Work Experience')">Add
+                    Work Experience</button>
+                <button type="button" class="btn btn-secondary" onclick="addSkill()">Add Skill</button>
+            </div>
+
+            <!-- Template Selection -->
+            <h2>Template Selection</h2>
+            <div class="form-group">
+                <label for="template">Select Template:</label>
+                <select class="form-control" id="template" name="template">
+                    <option value="template1">Template 1</option>
+                    <option value="template2">Template 2</option>
+                    <option value="template3">Template 3</option>
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Generate Resume</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- You can replace the Bootstrap and jQuery links with your preferred JavaScript framework or custom scripts -->
+
+    <script>
+        let isDarkMode = false;
+
+        function toggleMode() {
+            const body = document.body;
+            const container = document.querySelector('.container');
+            const h1 = document.querySelector('h1');
+            const inputs = document.querySelectorAll('input, textarea');
+            const modeLabel = document.getElementById('modeLabel');
+
+            isDarkMode = !isDarkMode;
+
+            if (isDarkMode) {
+                body.style.backgroundColor = '#1a1a1a';
+                body.style.color = '#ffffff';
+                container.style.backgroundColor = '#2d2d2d';
+                h1.style.color = '#ffffff';
+
+                inputs.forEach(input => {
+                    input.style.backgroundColor = '#333333';
+                    input.style.color = '#ffffff';
+                });
+
+                modeLabel.textContent = 'Light Mode';
+            } else {
+                body.style.backgroundColor = '#ffffff';
+                body.style.color = '#000000';
+                container.style.backgroundColor = '#f8f9fa';
+                h1.style.color = '#000000';
+
+                inputs.forEach(input => {
+                    input.style.backgroundColor = '#e9ecef';
+                    input.style.color = '#000000';
+                });
+
+                modeLabel.textContent = 'Dark Mode';
+            }
+        }
+
+        let educationCounter = 1;
+        let workExperienceCounter = 1;
+        let skillCounter = 1;
+
+        function addSection(section, label) {
+            const sectionContainer = document.querySelector(`.${section}`);
+            const newSection = document.createElement('div');
+            newSection.className = 'form-group';
+
+            // Increment the counter for each section
+            if (section === 'education') {
+                educationCounter++;
+            } else if (section === 'work-experience') {
+                workExperienceCounter++;
+            }
+
+            newSection.innerHTML = `
+                <h2>${label}</h2>
+                <div class="form-group">
+                    <label for="${section}_name_${educationCounter}">${section === 'education' ? 'Institution Name' : 'Company Name'}:</label>
+                    <input type="text" class="form-control" id="${section}_name_${educationCounter}" name="${section}_name_${educationCounter}" required>
+                </div>
+                <div class="form-group">
+                    <label for="${section}_title_${educationCounter}">${section === 'education' ? 'Degree Name' : 'Job Title'}:</label>
+                    <input type="text" class="form-control" id="${section}_title_${educationCounter}" name="${section}_title_${educationCounter}" required>
+                </div>
+                <div class="form-group">
+                    <label for="${section}_dates_${educationCounter}">${section === 'education' ? 'Graduation Year' : 'Dates of Employment'}:</label>
+                    <input type="text" class="form-control" id="${section}_dates_${educationCounter}" name="${section}_dates_${educationCounter}" required>
+                </div>
+            `;
+
+            sectionContainer.appendChild(newSection);
+
+            // Ensure dynamically added inputs are styled based on the dark mode
+            if (isDarkMode) {
+                const newInputs = newSection.querySelectorAll('input, textarea');
+                newInputs.forEach(input => {
+                    input.style.backgroundColor = '#333333';
+                    input.style.color = '#ffffff';
+                });
+            }
+        }
+
+        function addSkill() {
+            const skillsContainer = document.querySelector('.skills');
+            const newSkill = document.createElement('div');
+            newSkill.className = 'form-group';
+
+            // Increment the counter for skills
+            skillCounter++;
+
+            newSkill.innerHTML = `
+                <label for="skill_${skillCounter}">Skill ${skillCounter}:</label>
+                <input type="text" class="form-control" id="skill_${skillCounter}" name="skill_${skillCounter}" required>
+            `;
+
+            skillsContainer.appendChild(newSkill);
+
+            // Ensure dynamically added input is styled based on the dark mode
+            if (isDarkMode) {
+                const newInput = newSkill.querySelector('input');
+                newInput.style.backgroundColor = '#333333';
+                newInput.style.color = '#ffffff';
+            }
+        }
+    </script>
+</body>
+
+</html>
